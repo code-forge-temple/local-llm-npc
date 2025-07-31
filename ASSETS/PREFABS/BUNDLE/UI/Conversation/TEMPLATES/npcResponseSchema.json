@@ -1,0 +1,105 @@
+{
+    "type": "object",
+    "properties": {
+        "message": {
+            "type": "string",
+            "description": "The educational response from Terra to the student, written in an encouraging and practical tone"
+        },
+        "signal": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "enum": [
+                        "learning_checkpoint",
+                        "topic_completed",
+                        "assessment_question",
+                        "encouragement",
+                        "difficulty_adjustment",
+                        "observation_prompt",
+                        "reflection_moment",
+                        "garden_interaction",
+                        "knowledge_unlocked"
+                    ],
+                    "description": "The type of educational signal to trigger in the game"
+                },
+                "data": {
+                    "type": "object",
+                    "properties": {
+                        "activity_type": {
+                            "type": "string",
+                            "enum": [
+                                "soil_testing",
+                                "plant_observation",
+                                "pest_identification",
+                                "compost_monitoring",
+                                "water_management",
+                                "companion_planting",
+                                "seed_starting",
+                                "harvest_timing",
+                                "ph_testing",
+                                "nutrient_analysis"
+                            ],
+                            "description": "Specific hands-on activity to perform"
+                        },
+                        "topic_name": {
+                            "type": "string",
+                            "description": "The specific agricultural topic being learned"
+                        },
+                        "difficulty_level": {
+                            "type": "string",
+                            "enum": [
+                                "beginner",
+                                "intermediate",
+                                "advanced"
+                            ],
+                            "description": "Recommended difficulty adjustment"
+                        },
+                        "observation_target": {
+                            "type": "string",
+                            "description": "What the student should observe in the garden environment"
+                        },
+                        "learning_objective": {
+                            "type": "string",
+                            "description": "The specific learning goal for this interaction"
+                        },
+                        "next_steps": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            },
+                            "description": "Suggested follow-up activities or topics to explore"
+                        },
+                        "assessment_criteria": {
+                            "type": "string",
+                            "description": "What understanding should be demonstrated"
+                        },
+                        "encouragement_type": {
+                            "type": "string",
+                            "enum": [
+                                "milestone_celebration",
+                                "progress_acknowledgment",
+                                "curiosity_praise",
+                                "problem_solving_recognition",
+                                "connection_making"
+                            ],
+                            "description": "Type of positive reinforcement to provide"
+                        },
+                        "garden_element": {
+                            "type": "string",
+                            "description": "Specific garden area or plant to highlight"
+                        }
+                    }
+                }
+            },
+            "required": [
+                "type",
+                "data"
+            ]
+        }
+    },
+    "required": [
+        "message",
+        "signal"
+    ]
+}

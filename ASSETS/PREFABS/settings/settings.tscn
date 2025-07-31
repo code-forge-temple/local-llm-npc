@@ -1,0 +1,186 @@
+[gd_scene load_steps=5 format=3 uid="uid://bms6j3kpcgi3g"]
+
+[ext_resource type="Texture2D" uid="uid://cisufoqml2seu" path="res://ASSETS/PREFABS/BUNDLE/UI/Conversation/TEXTURES/panel.png" id="1_0nu2m"]
+[ext_resource type="Texture2D" uid="uid://dml60yldwwkcb" path="res://ASSETS/PREFABS/BUNDLE/UI/Conversation/TEXTURES/panel_title.png" id="2_blmrw"]
+[ext_resource type="Script" uid="uid://c2mpn37domrqp" path="res://ASSETS/PREFABS/settings/Settings.cs" id="2_lcj0i"]
+[ext_resource type="Texture2D" uid="uid://bj3voj4ug2isy" path="res://ASSETS/PREFABS/BUNDLE/UI/Conversation/TEXTURES/round_button.png" id="3_lcj0i"]
+
+[node name="Settings" type="NinePatchRect"]
+process_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -408.0
+offset_top = -222.5
+offset_right = 408.0
+offset_bottom = 222.5
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_0nu2m")
+patch_margin_left = 8
+patch_margin_top = 8
+patch_margin_right = 8
+patch_margin_bottom = 8
+script = ExtResource("2_lcj0i")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -86.0
+offset_top = 11.0
+offset_right = 87.0
+offset_bottom = 83.0
+grow_horizontal = 2
+texture = ExtResource("2_blmrw")
+
+[node name="Label" type="Label" parent="TextureRect"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -69.5
+offset_top = -13.0
+offset_right = 69.5
+offset_bottom = 13.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 18
+text = "SETTINGS"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CloseButton" type="TextureButton" parent="."]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -50.0
+offset_top = 9.0
+offset_right = -10.0
+offset_bottom = 49.0
+grow_horizontal = 0
+texture_normal = ExtResource("3_lcj0i")
+stretch_mode = 4
+
+[node name="Label" type="Label" parent="CloseButton"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "X"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="OllamaHostLineEdit" type="LineEdit" parent="."]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 151.0
+offset_top = -15.5
+offset_right = -13.0
+offset_bottom = 15.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Label" type="Label" parent="OllamaHostLineEdit"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = -142.0
+offset_top = -12.5
+offset_right = -7.0
+offset_bottom = 10.5
+grow_vertical = 2
+size_flags_horizontal = 0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Ollama Host URL:"
+
+[node name="SaveButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -73.0
+offset_top = -52.5
+offset_right = 75.0
+offset_bottom = -8.5
+grow_horizontal = 2
+grow_vertical = 0
+text = "SAVE"
+
+[node name="SubjectOptionButton" type="OptionButton" parent="."]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 153.0
+offset_top = 31.5
+offset_right = -14.0
+offset_bottom = 51.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="SubjectOptionButton"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = -142.0
+offset_top = -12.5
+offset_right = -7.0
+offset_bottom = 10.5
+grow_vertical = 2
+size_flags_horizontal = 0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Selected Subject:"
+
+[node name="GemmaModelCheckBox" type="CheckBox" parent="."]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 225.0
+offset_top = 68.5
+offset_right = -15.0
+offset_bottom = 92.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="GemmaModelCheckBox"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = -214.0
+offset_top = -13.0
+offset_right = -2.0
+offset_bottom = 10.0
+grow_vertical = 2
+size_flags_horizontal = 0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Use Gemma3n Latest (e4b):"

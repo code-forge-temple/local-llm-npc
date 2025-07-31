@@ -1,0 +1,31 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="local-llm-npc (4.4)"
+run/main_scene="uid://bw8rebtai2m1o"
+config/features=PackedStringArray("4.4", "C#", "Forward Plus")
+config/icon="res://icon.svg"
+
+[dotnet]
+
+project/assembly_name="local-llm-npc"
+
+[file_customization]
+
+folder_colors={
+"res://ASSETS/": "red",
+"res://ASSETS/PREFABS/": "yellow",
+"res://ASSETS/PREFABS/BUNDLE/": "blue",
+"res://ASSETS/PREFABS/player/TEXTURES/": "teal",
+"res://ASSETS/SCENES/": "orange",
+"res://ASSETS/TEXTURES/": "teal"
+}

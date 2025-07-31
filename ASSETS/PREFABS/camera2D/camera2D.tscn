@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://bjd7lmjtp7o8e"]
+
+[ext_resource type="Script" uid="uid://coktkdufsmv0" path="res://ASSETS/PREFABS/camera2D/SCRIPTS/CameraFollow.cs" id="1_kucad"]
+
+[node name="Camera2D" type="Camera2D"]
+script = ExtResource("1_kucad")

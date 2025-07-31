@@ -1,0 +1,120 @@
+[gd_scene load_steps=11 format=3 uid="uid://bw8rebtai2m1o"]
+
+[ext_resource type="PackedScene" uid="uid://wwo4vmldwgbn" path="res://ASSETS/PREFABS/player/player.tscn" id="1_6e2w7"]
+[ext_resource type="PackedScene" uid="uid://c5a1axkwlhjax" path="res://ASSETS/PREFABS/environment/environment.tscn" id="2_hx1l0"]
+[ext_resource type="PackedScene" uid="uid://bjd7lmjtp7o8e" path="res://ASSETS/PREFABS/camera2D/camera2D.tscn" id="3_d6iby"]
+[ext_resource type="PackedScene" uid="uid://b40cjmb6rjfcb" path="res://ASSETS/PREFABS/NPC/npc.tscn" id="4_hx1l0"]
+[ext_resource type="PackedScene" uid="uid://c23w5l0ef1y10" path="res://ASSETS/PREFABS/BUNDLE/ConversationStarter/conversation_starter.tscn" id="5_6xan0"]
+[ext_resource type="PackedScene" uid="uid://cvyqv3jnubd04" path="res://ASSETS/PREFABS/BUNDLE/UI/Conversation/conversation.tscn" id="6_gipgl"]
+[ext_resource type="Script" uid="uid://c4ich55w0p5pf" path="res://ASSETS/PREFABS/BUNDLE/UI/Conversation/TEMPLATES/ConversationEventHandler.cs" id="7_a58vb"]
+[ext_resource type="Texture2D" uid="uid://cisufoqml2seu" path="res://ASSETS/PREFABS/BUNDLE/UI/Conversation/TEXTURES/panel.png" id="8_ve0en"]
+[ext_resource type="PackedScene" uid="uid://bms6j3kpcgi3g" path="res://ASSETS/PREFABS/settings/settings.tscn" id="9_hlkty"]
+[ext_resource type="Texture2D" uid="uid://bj3voj4ug2isy" path="res://ASSETS/PREFABS/BUNDLE/UI/Conversation/TEXTURES/round_button.png" id="10_fvcu0"]
+
+[node name="MainScene" type="Node2D"]
+
+[node name="Player" parent="." instance=ExtResource("1_6e2w7")]
+position = Vector2(63, -28)
+scale = Vector2(0.1, 0.1)
+speed = 50.0
+
+[node name="Environment" parent="." instance=ExtResource("2_hx1l0")]
+
+[node name="Camera2D" parent="." instance=ExtResource("3_d6iby")]
+z_index = 1
+zoom = Vector2(4, 4)
+playerPath = NodePath("../Player")
+followSpeed = 4.0
+
+[node name="NPC" parent="." instance=ExtResource("4_hx1l0")]
+position = Vector2(255, -39)
+scale = Vector2(0.1, 0.1)
+
+[node name="ConversationStarter" parent="NPC" node_paths=PackedStringArray("conversation") instance=ExtResource("5_6xan0")]
+conversation = NodePath("../Conversation")
+
+[node name="CollisionShape2D" parent="NPC/ConversationStarter" index="0"]
+position = Vector2(1.25, 30)
+
+[node name="TalkButton" parent="NPC/ConversationStarter" index="1"]
+offset_left = 80.0
+offset_top = -280.0
+offset_right = 300.0
+offset_bottom = -69.0
+
+[node name="Conversation" parent="NPC" node_paths=PackedStringArray("EventHandler") instance=ExtResource("6_gipgl")]
+visible = false
+NpcName = "Terra"
+NpcPronouns = 2
+EventHandler = NodePath("../ConversationEventHandler")
+
+[node name="ConversationEventHandler" type="Node" parent="NPC" node_paths=PackedStringArray("progressLabel", "educationalConversation")]
+script = ExtResource("7_a58vb")
+progressLabel = NodePath("../../UI/Progress/Label")
+educationalConversation = NodePath("../Conversation")
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="Progress" type="NinePatchRect" parent="UI"]
+texture_filter = 1
+offset_right = 428.0
+offset_bottom = 35.0
+texture = ExtResource("8_ve0en")
+patch_margin_left = 8
+patch_margin_top = 8
+patch_margin_right = 8
+patch_margin_bottom = 8
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+
+[node name="Label" type="Label" parent="UI/Progress"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 7.0
+offset_top = -11.5
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.321569, 0.615686, 0, 1)
+text = "PROGRESS INFO..."
+
+[node name="Settings" parent="UI" node_paths=PackedStringArray("openSettingsButton") instance=ExtResource("9_hlkty")]
+visible = false
+offset_left = -269.5
+offset_top = -248.5
+offset_right = 269.5
+offset_bottom = 248.5
+openSettingsButton = NodePath("../OpenSettingsButton")
+
+[node name="OpenSettingsButton" type="TextureButton" parent="UI"]
+texture_filter = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -40.0
+offset_bottom = 40.0
+grow_horizontal = 0
+texture_normal = ExtResource("10_fvcu0")
+stretch_mode = 4
+
+[node name="Label" type="Label" parent="UI/OpenSettingsButton"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -13.0
+offset_right = 20.0
+offset_bottom = 18.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "⚙"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[editable path="NPC/ConversationStarter"]

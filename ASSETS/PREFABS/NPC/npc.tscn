@@ -1,0 +1,62 @@
+[gd_scene load_steps=7 format=3 uid="uid://b40cjmb6rjfcb"]
+
+[ext_resource type="Texture2D" uid="uid://dickbhm3bc6qj" path="res://ASSETS/PREFABS/NPC/TEXTURES/character_femalePerson_sheetHD.png" id="1_o4cbo"]
+[ext_resource type="Script" uid="uid://b0i5q2yhk21j0" path="res://ASSETS/PREFABS/NPC/SCRIPTS/Npc.cs" id="1_wha04"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_o4cbo"]
+size = Vector2(122, 189)
+
+[sub_resource type="Animation" id="Animation_g6rtk"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_wha04"]
+resource_name = "idle"
+length = 3.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [0, 23]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_kgd4l"]
+_data = {
+&"RESET": SubResource("Animation_g6rtk"),
+&"idle": SubResource("Animation_wha04")
+}
+
+[node name="NPC" type="CharacterBody2D"]
+script = ExtResource("1_wha04")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-2, 32.5)
+shape = SubResource("RectangleShape2D_o4cbo")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_o4cbo")
+hframes = 9
+vframes = 5
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_kgd4l")
+}
