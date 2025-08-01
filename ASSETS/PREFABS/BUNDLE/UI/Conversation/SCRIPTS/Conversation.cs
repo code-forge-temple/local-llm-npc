@@ -22,7 +22,7 @@ namespace LllmNpcConversationSystem
         HeHim,
         SheHer
     }
-    
+
     /// <summary>
     /// Handles the UI and logic for NPC conversations, including message history,
     /// AI response fetching, and display formatting.
@@ -136,6 +136,17 @@ namespace LllmNpcConversationSystem
         /// Indicates if the conversation display needs updating.
         /// </summary>
         protected bool needsDisplayUpdate = false;
+
+        /// <summary>
+        /// Handles logic when the conversation UI visibility changes.
+        /// </summary>
+        protected virtual void OnVisibilityChanged()
+        {
+            if (Visible)
+                GetTree().Paused = true;
+            else
+                GetTree().Paused = false;
+        }
 
         /// <summary>
         /// Loads the response schema from the specified path.
@@ -265,14 +276,16 @@ namespace LllmNpcConversationSystem
             await SendPlayerMessage();
         }
 
-        /// <summary>
-        /// Sends the player's message to the conversation and fetches the AI response.
-        /// </summary>
-        protected virtual async System.Threading.Tasks.Task SendPlayerMessage()
+        protected async System.Threading.Tasks.Task SendPlayerMessageCore(
+            string playerMessage,
+            Func<System.Threading.Tasks.Task> beforeSend = null,
+            Func<System.Threading.Tasks.Task> afterSend = null,
+            string modelName = null,
+            Func<List<Message>> buildPrompt = null)
         {
-            if (isWaitingForResponse || string.IsNullOrWhiteSpace(playerResponseLineEdit.Text)) return;
+            if (isWaitingForResponse || string.IsNullOrWhiteSpace(playerMessage)) return;
 
-            var playerMessage = playerResponseLineEdit.Text.Trim();
+            if (beforeSend != null) await beforeSend();
 
             isWaitingForResponse = true;
             playerResponseLineEdit.Text = "";
@@ -296,12 +309,17 @@ namespace LllmNpcConversationSystem
 
             try
             {
-                //NOTE: gemma3n:e4b failed to run on Jetson Nano initially due to insufficient memory. The device’s physical RAM (~7.4 GB) plus zram swap (~3.8 GB compressed RAM swap) was not enough to handle the model’s large memory demands (which can require 16+ GB RAM). This caused the Linux OOM killer to terminate the Ollama process during model loading. After adding an 8 GB on-disk swap file, the total available swap increased to ~11.8 GB, improving stability.
-                await foreach (var response in ollamaService.FetchAIResponseAsync(conversationHistory.GetRange(0, conversationHistory.Count - 1), "gemma3n:e4b", responseFormat))
+                var prompt = buildPrompt != null ? buildPrompt() : conversationHistory;
+                var model = modelName ?? "gemma3n:e4b";
+
+                await foreach (var response in ollamaService.FetchAIResponseAsync(
+                    prompt,
+                    model,
+                    responseFormat))
                 {
                     if (response.Success)
                     {
-                        conversationHistory[conversationHistory.Count - 1].Content = response.Reply;
+                        conversationHistory[^1].Content = response.Reply;
 
                         if (response.Final && response.StructuredData != null && responseHandler != null)
                         {
@@ -320,8 +338,6 @@ namespace LllmNpcConversationSystem
                         conversationHistory[^1].Content = $"Error: {response.Error}";
                         conversationHistory[^1].Role = MessageType.System;
                         needsDisplayUpdate = true;
-
-                        GD.Print($"Error in chunk: {response.Error}");
                         break;
                     }
                 }
@@ -331,18 +347,37 @@ namespace LllmNpcConversationSystem
                 conversationHistory[^1].Content = $"Error: {ex.Message}";
                 conversationHistory[^1].Role = MessageType.System;
                 needsDisplayUpdate = true;
-
-                GD.PrintErr($"Error in AI conversation: {ex.Message}");
+                GD.PrintErr($"Error in conversation: {ex.Message}");
             }
             finally
             {
                 isWaitingForResponse = false;
                 playerResponseLineEdit.Editable = true;
-                playerResponseButton.Disabled = false;
                 playerResponseLineEdit.GrabFocus();
+                playerResponseButton.Disabled = false;
 
-                GD.Print("Re-enabled input");
+                if (afterSend != null) await afterSend();
             }
+        }
+
+
+        /// <summary>
+        /// Sends the player's message to the conversation and fetches the AI response.
+        /// </summary>
+        protected virtual async System.Threading.Tasks.Task SendPlayerMessage()
+        {
+            var playerMessage = playerResponseLineEdit.Text.Trim();
+
+            // NOTE: gemma3n:e4b failed to run on Jetson Nano initially due to insufficient memory. 
+            // The device’s physical RAM (~7.4 GB) plus zram swap (~3.8 GB compressed RAM swap) was not enough to handle the model’s large memory demands (which can require 16+ GB RAM). 
+            // This caused the Linux OOM killer to terminate the Ollama process during model loading. After adding an 8 GB on-disk swap file, the total available swap increased to ~11.8 GB, improving stability.
+            await SendPlayerMessageCore(
+                playerMessage,
+                beforeSend: null,
+                afterSend: null,
+                modelName: "gemma3n:e4b",
+                buildPrompt: () => conversationHistory.GetRange(0, conversationHistory.Count - 1)
+            );
         }
 
         /// <summary>

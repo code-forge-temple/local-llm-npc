@@ -112,8 +112,10 @@ namespace LllmNpcConversationSystem
         /// <summary>
         /// Handles logic when the conversation UI visibility changes, such as subject or model updates.
         /// </summary>
-        private void OnVisibilityChanged()
+        protected override void OnVisibilityChanged()
         {
+            base.OnVisibilityChanged();
+
             if (!Visible) return;
 
             var gameData = GameData.getInstance();
@@ -170,90 +172,25 @@ namespace LllmNpcConversationSystem
         /// </summary>
         protected virtual async System.Threading.Tasks.Task SendEducationalPlayerMessage()
         {
-            if (isWaitingForResponse || string.IsNullOrWhiteSpace(playerResponseLineEdit.Text)) return;
-
             var playerMessage = playerResponseLineEdit.Text.Trim();
 
-            progressTracker?.RecordInteraction(playerMessage, Subject.ToString());
-
-            AdjustDifficultyIfNeeded(playerMessage);
-
-            TrackTopicMentions(playerMessage);
-
-            isWaitingForResponse = true;
-            playerResponseLineEdit.Text = "";
-            playerResponseLineEdit.Editable = false;
-            playerResponseLineEdit.ReleaseFocus();
-            playerResponseButton.Disabled = true;
-
-            conversationHistory.Add(new Message
-            {
-                Role = MessageType.User,
-                Content = playerMessage
-            });
-
-            needsDisplayUpdate = true;
-
-            conversationHistory.Add(new Message
-            {
-                Role = MessageType.Assistant,
-                Content = ""
-            });
-
-            try
-            {
-                var modelName = useGemma3nLatest ? "gemma3n:e4b" : "gemma3n:e2b";
-
-                await foreach (var response in ollamaService.FetchAIResponseAsync(
-                    BuildEducationalPrompt(),
-                    modelName,
-                    responseFormat))
+            await SendPlayerMessageCore(
+                playerMessage,
+                beforeSend: async () =>
                 {
-                    if (response.Success)
-                    {
-                        conversationHistory[^1].Content = response.Reply;
-
-                        if (response.Final && response.StructuredData != null && responseHandler != null)
-                        {
-                            responseHandler.HandleStructuredResponse(response.StructuredData);
-                        }
-
-                        needsDisplayUpdate = true;
-
-                        if (response.Final)
-                        {
-                            learningSessionCount++;
-
-                            GD.Print($"🟢 Final Ollama message: {response.Reply}");
-
-                            break;
-                        }
-                    }
-                    else
-                    {
-                        conversationHistory[^1].Content = $"Error: {response.Error}";
-                        conversationHistory[^1].Role = MessageType.System;
-                        needsDisplayUpdate = true;
-
-                        break;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                conversationHistory[^1].Content = $"Error: {ex.Message}";
-                conversationHistory[^1].Role = MessageType.System;
-                needsDisplayUpdate = true;
-
-                GD.PrintErr($"Error in educational conversation: {ex.Message}");
-            }
-            finally
-            {
-                isWaitingForResponse = false;
-                playerResponseLineEdit.Editable = true;
-                playerResponseLineEdit.GrabFocus();
-                playerResponseButton.Disabled = false;
-            }
+                    progressTracker?.RecordInteraction(playerMessage, Subject.ToString());
+                    AdjustDifficultyIfNeeded(playerMessage);
+                    TrackTopicMentions(playerMessage);
+                    await System.Threading.Tasks.Task.CompletedTask;
+                },
+                afterSend: async () =>
+                {
+                    learningSessionCount++;
+                    await System.Threading.Tasks.Task.CompletedTask;
+                },
+                modelName: useGemma3nLatest ? "gemma3n:e4b" : "gemma3n:e2b",
+                buildPrompt: BuildEducationalPrompt
+            );
         }
 
         /// <summary>

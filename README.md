@@ -155,6 +155,7 @@ Set your Ollama host URL in the game settings (e.g., `http://localhost:11434` or
 ## Presentation Video
 
 Watch the project presentation here:
+
 [![kGyafSgyRWA](https://img.youtube.com/vi/kGyafSgyRWA/0.jpg)](https://www.youtube.com/watch?v=kGyafSgyRWA)
 
 ## Project Architecture
