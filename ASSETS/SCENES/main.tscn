@@ -1,9 +1,10 @@
-[gd_scene load_steps=11 format=3 uid="uid://bw8rebtai2m1o"]
+[gd_scene load_steps=12 format=3 uid="uid://bw8rebtai2m1o"]
 
 [ext_resource type="PackedScene" uid="uid://wwo4vmldwgbn" path="res://ASSETS/PREFABS/player/player.tscn" id="1_6e2w7"]
 [ext_resource type="PackedScene" uid="uid://c5a1axkwlhjax" path="res://ASSETS/PREFABS/environment/environment.tscn" id="2_hx1l0"]
 [ext_resource type="PackedScene" uid="uid://bjd7lmjtp7o8e" path="res://ASSETS/PREFABS/camera2D/camera2D.tscn" id="3_d6iby"]
 [ext_resource type="PackedScene" uid="uid://b40cjmb6rjfcb" path="res://ASSETS/PREFABS/NPC/npc.tscn" id="4_hx1l0"]
+[ext_resource type="AudioStream" uid="uid://dodb4705yb2j3" path="res://ASSETS/PREFABS/environment/AUDIO/yell-YELLAMRO20160506SM3.mp3" id="4_jbdvc"]
 [ext_resource type="PackedScene" uid="uid://c23w5l0ef1y10" path="res://ASSETS/PREFABS/BUNDLE/ConversationStarter/conversation_starter.tscn" id="5_6xan0"]
 [ext_resource type="PackedScene" uid="uid://cvyqv3jnubd04" path="res://ASSETS/PREFABS/BUNDLE/UI/Conversation/conversation.tscn" id="6_gipgl"]
 [ext_resource type="Script" uid="uid://c4ich55w0p5pf" path="res://ASSETS/PREFABS/BUNDLE/UI/Conversation/TEMPLATES/ConversationEventHandler.cs" id="7_a58vb"]
@@ -25,6 +26,12 @@ z_index = 1
 zoom = Vector2(4, 4)
 playerPath = NodePath("../Player")
 followSpeed = 4.0
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="Camera2D"]
+process_mode = 3
+stream = ExtResource("4_jbdvc")
+autoplay = true
+parameters/looping = true
 
 [node name="NPC" parent="." instance=ExtResource("4_hx1l0")]
 position = Vector2(255, -39)

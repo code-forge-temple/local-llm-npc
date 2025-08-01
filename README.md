@@ -167,6 +167,10 @@ See [PROJECT_ARCHITECTURE.md](PROJECT_ARCHITECTURE.md) for a detailed overview o
 
 Sprites used in this project are from [Kenney's asset store](https://kenney.nl/assets), released under [Creative Commons CC0](https://creativecommons.org/publicdomain/zero/1.0/).
 
+Audio files were taken from the [Yellowstone National Park Sound Library](https://www.nps.gov/yell/learn/photosmultimedia/soundlibrary.htm?utm_source=chatgpt.com), which are in the public domain:  
+> "The files available here were recorded in the park and are in the public domain."
+
+
 ## License
 
 See [LICENSE](LICENSE) for details.
