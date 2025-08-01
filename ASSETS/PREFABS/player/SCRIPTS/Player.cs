@@ -43,7 +43,7 @@ public partial class Player : CharacterBody2D
 
         velocity.X = 0;
 
-        if (Input.IsKeyPressed(Key.D))
+        if (Input.IsKeyPressed(Key.D) || Input.IsKeyPressed(Key.Right))
         {
             velocity.X = speed;
 
@@ -55,7 +55,7 @@ public partial class Player : CharacterBody2D
 
             keyPressed = true;
         }
-        else if (Input.IsKeyPressed(Key.A))
+        else if (Input.IsKeyPressed(Key.A) || Input.IsKeyPressed(Key.Left))
         {
             velocity.X = -speed;
             if (IsOnFloor())
